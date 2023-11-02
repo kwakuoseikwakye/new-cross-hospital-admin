@@ -21,7 +21,7 @@ class TransactionResource extends JsonResource
             // "phone" => $this->phone,
             "date" => date("jS F Y H:i:s A",strtotime($this->created_at)),
             "amount" => "GHS".$this->amount,
-            "status" => $this->status == "success" ? "<span style='background-color: #28a74520; color: #28a745'>SUCCESS</span>" : "<span style='background-color: #dc354520; color: #dc3545'>{$this->status}</span>"
+            "status" => $this->status == "success" ? "<span style='background-color: #28a74520; color: #28a745;'>SUCCESS</span>" : "<span style='background-color: #dc354520; color: #dc3545'>{$this->status}</span>"
         ];
     }
 }

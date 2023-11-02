@@ -12,6 +12,7 @@ class TransactionController extends Controller
     {
         $data = DB::table("transactions")->select("transactions.*","booking.name")
         ->join("booking","booking.email","transactions.email")
+        ->orderByDesc("transactions.created_at")
         ->get();
 
         return response()->json([
