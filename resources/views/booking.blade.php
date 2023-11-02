@@ -85,6 +85,8 @@
                     "lengthChange": false,
                     dom: 'Bfrtip',
                     processing: true,
+                    ordering: false,
+                    order : [],
                     ajax: {
                         url: '/api/fetch_today_booking',
                         type: "GET",
@@ -168,6 +170,8 @@
                     "lengthChange": false,
                     dom: 'Bfrtip',
                     processing: true,
+                    ordering: false,
+                    order : [],
                     responsive: true,
                     ajax: {
                         url: '/api/all_booking',
