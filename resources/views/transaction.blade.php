@@ -86,6 +86,8 @@
                     "lengthChange": false,
                     dom: 'Bfrtip',
                     processing: true,
+                    ordering: false,
+                    // order : [],
                     ajax: {
                         url: '/api/transactions',
                         type: "GET",
