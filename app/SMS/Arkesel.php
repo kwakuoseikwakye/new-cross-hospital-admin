@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Gitplus;
+namespace App\SMS;
 
 class Arkesel
 {

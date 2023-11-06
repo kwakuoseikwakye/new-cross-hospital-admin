@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\SMS\Arkesel as Sms;
 use App\Http\Resources\BookingResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class BookingController extends Controller
 {
@@ -14,7 +17,7 @@ class BookingController extends Controller
     public function index()
     {
         $today = date("Y-m-d");
-        $booking = DB::table("booking")->select("booking.*", "services.code","services.desc")
+        $booking = DB::table("booking")->select("booking.*", "services.code", "services.desc")
             ->join("services", "booking.service_code", "services.code")
             ->whereDate("booking_date", $today)
             ->get();
@@ -26,7 +29,7 @@ class BookingController extends Controller
 
     public function allBooking()
     {
-        $booking = DB::table("booking")->select("booking.*", "services.code","services.desc")
+        $booking = DB::table("booking")->select("booking.*", "services.code", "services.desc")
             ->join("services", "booking.service_code", "services.code")
             ->orderByDesc("booking.booking_date")
             ->get();
@@ -50,6 +53,48 @@ class BookingController extends Controller
         return response()->json([
             "status" => true
         ]);
+    }
+
+    public function sendMessage(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "phone" => "required",
+            "id" => "required",
+            "messageBody" => "required",
+            "messageType" => "required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "status" => false,
+                "msg" => join(" ", $validator->errors()->all()),
+            ]);
+        }
+
+        switch (strtolower($request->messageType)) {
+            case "sms":
+                $sms = new Sms("NC-HOSPITAL", env("ARKESEL_SMS_API_KEY"));
+                $res = $sms->send($request->phone, $request->messageBody);
+                Log::info($res);
+                return response()->json([
+                    "status" => true,
+                    "msg" => "Response from sms",
+                ]);
+
+                break;
+            case "push":
+                // $firebase = FirebaseController::getReference();
+                // if ($firebase->getReference("Users/{$request->patientCode}/id")->getSnapshot()->exists()) {
+                //     $userID = $firebase->getReference("Users/{$request->patientCode}")->getValue()["id"];
+                //     $firebase->getReference("Notifications/{$userID}")->push([
+                //         "from" => "back_office",
+                //         "title" => $request->messageTitle,
+                //         "message" => $request->messageBody,
+                //         "screen" => "general_notification",
+                //     ]);
+                // }
+                break;
+        }
     }
 
     /**

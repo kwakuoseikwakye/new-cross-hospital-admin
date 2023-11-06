@@ -79,6 +79,7 @@
             </div> <!-- end row-->
         </div>
         @include('info')
+        @include('send_sms')
         @push('js-scripts')
             <script>
                 var todayBookingTable = $('#today-booking-table').DataTable({
@@ -253,6 +254,7 @@
                     ]
                 });
 
+                //View booking info
                 $("#booking-table").on("click", ".booking-info-btn", function() {
                     let data = bookingTable.row($(this).parents('tr')).data();
 
@@ -268,6 +270,7 @@
 
                 });
 
+                //update status
                 $("#booking-table").on("click", ".update-status-btn", function() {
                     let data = bookingTable.row($(this).parents('tr')).data();
 
@@ -318,6 +321,15 @@
                             })
                         }
                     })
+                });
+
+                //send reminders msg
+                $("#booking-table").on("click", ".send-reminder-btn", function() {
+                    let data = bookingTable.row($(this).parents('tr')).data();
+
+                    $("#send-msg-modal").modal("show");
+                    $("#message-recipient-phone").val(data.phone);
+                    $("#message-recipient-code").val(data.id);
                 });
 
                 $("#today-booking-table").on("click", ".booking-info-btn", function() {

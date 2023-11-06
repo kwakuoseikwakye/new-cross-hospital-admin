@@ -24,3 +24,4 @@ Route::get('/fetch_today_booking', [BookingController::class, "index"]);
 Route::get('/all_booking', [BookingController::class, "allBooking"]);
 Route::get('/transactions', [TransactionController::class, "index"]);
 Route::get('/has_visited/{id}', [BookingController::class, "checkVisit"]);
+Route::post('/send_message', [BookingController::class, "sendMessage"]);
