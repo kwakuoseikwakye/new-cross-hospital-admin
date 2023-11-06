@@ -3,19 +3,19 @@
 
         <!-- Brand Logo Light -->
         <a href="/" class="logo logo-light">
-            <p>New Cross Hospital Admin</p>
+            <img src="/favicon.png" alt="small logo">
             <span class="logo-sm">
-                <img src="assets/images/logo-sm.png" alt="small logo">
+                <img src="/favicon.png" alt="small logo">
             </span>
         </a>
 
         <!-- Brand Logo Dark -->
         <a href="/" class="logo logo-dark">
             <span class="logo-lg">
-                <img src="assets/images/logo-dark.png" alt="dark logo">
+                <img src="/favicon.png"  alt="dark logo">
             </span>
             <span class="logo-sm">
-                <img src="assets/images/logo-dark-sm.png" alt="small logo">
+                <img src="/favicon.png" alt="small logo">
             </span>
         </a>
 
@@ -36,7 +36,7 @@
                 <a href="pages-profile.html">
                     <img src="assets/images/users/avatar-1.jpg" alt="user-image" height="42"
                         class="rounded-circle shadow-sm">
-                    <span class="leftbar-user-name mt-2">Dominic Keller</span>
+                    <span class="leftbar-user-name mt-2">{{Auth::user()->name}}</span>
                 </a>
             </div>
 

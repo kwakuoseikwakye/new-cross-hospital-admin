@@ -41,16 +41,15 @@
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
-                                                <th>Email</th>
+                                                {{-- <th>Email</th> --}}
                                                 <th>Amount</th>
                                                 <th>Booking Date</th>
                                                 <th>Service</th>
                                                 <th>Status</th>
-                                                {{-- <th>Message</th> --}}
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{--  --}}
                                         </tbody>
                                     </table>
                                 </div> <!-- end preview-->
@@ -60,16 +59,15 @@
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
-                                                <th>Email</th>
+                                                {{-- <th>Email</th> --}}
                                                 <th>Amount</th>
                                                 <th>Booking Date</th>
                                                 <th>Service</th>
                                                 <th>Status</th>
-                                                {{-- <th>Message</th> --}}
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{--  --}}
                                         </tbody>
                                     </table>
                                 </div> <!-- end preview code-->
@@ -79,6 +77,7 @@
                 </div><!-- end col-->
             </div> <!-- end row-->
         </div>
+        @include('info')
         @push('js-scripts')
             <script>
                 var todayBookingTable = $('#today-booking-table').DataTable({
@@ -86,7 +85,7 @@
                     dom: 'Bfrtip',
                     processing: true,
                     ordering: false,
-                    order : [],
+                    order: [],
                     ajax: {
                         url: '/api/fetch_today_booking',
                         type: "GET",
@@ -94,9 +93,9 @@
                     columns: [{
                             data: "name"
                         },
-                        {
-                            data: "email"
-                        },
+                        // {
+                        //     data: "email"
+                        // },
                         {
                             data: "amount"
                         },
@@ -108,11 +107,11 @@
                         },
                         {
                             data: "status"
-                        }
-                        //   {
-                        //       data: null,
-                        //       defaultContent: "<button href = '#' title='View student info' class='btn btn-outline-secondary btn-sm info-btn'> <i class='far fa-user'></i> </button> <button href = '#' title='Update student info' class='btn btn-outline-info btn-sm edit-btn' > <i class='fas fa-edit'></i> </button> <button href = '#' title='Delete student' class='btn btn-outline-danger btn-sm delete-btn' onclick = deleteStudent()> <i class='far fa-trash-alt'></i> </button>",
-                        //   },
+                        },
+                        {
+                            data: null,
+                            defaultContent: "<button href='#' title='View booking info' class='btn btn-outline-info btn-sm booking-info-btn'>More Info</button>",
+                        },
                     ],
                     buttons: [{
                             extend: 'print',
@@ -171,7 +170,7 @@
                     dom: 'Bfrtip',
                     processing: true,
                     ordering: false,
-                    order : [],
+                    order: [],
                     responsive: true,
                     ajax: {
                         url: '/api/all_booking',
@@ -180,9 +179,9 @@
                     columns: [{
                             data: "name"
                         },
-                        {
-                            data: "email"
-                        },
+                        // {
+                        //     data: "email"
+                        // },
                         {
                             data: "amount"
                         },
@@ -194,11 +193,11 @@
                         },
                         {
                             data: "status"
-                        }
-                        //   {
-                        //       data: null,
-                        //       defaultContent: "<button href = '#' title='View student info' class='btn btn-outline-secondary btn-sm info-btn'> <i class='far fa-user'></i> </button> <button href = '#' title='Update student info' class='btn btn-outline-info btn-sm edit-btn' > <i class='fas fa-edit'></i> </button> <button href = '#' title='Delete student' class='btn btn-outline-danger btn-sm delete-btn' onclick = deleteStudent()> <i class='far fa-trash-alt'></i> </button>",
-                        //   },
+                        },
+                        {
+                            data: null,
+                            defaultContent: "<button href='#' title='View booking info' class='btn btn-outline-info btn-sm booking-info-btn'>More Info</button>",
+                        },
                     ],
                     buttons: [{
                             extend: 'print',
@@ -250,6 +249,36 @@
                             }
                         },
                     ]
+                });
+
+                $("#booking-table").on("click", ".booking-info-btn", function() {
+                    let data = bookingTable.row($(this).parents('tr')).data();
+
+                    $("#booking-info-modal").modal("show");
+                    $("#full-details-status").html(data.status);
+                    $("#full-details-name").html(data.name);
+                    $("#full-details-email").html(data.email);
+                    $("#full-details-phone").html(data.phone);
+                    $("#full-details-date").html(data.date);
+                    $("#full-details-message").html(data.message);
+                    $("#full-details-service").html(data.service);
+                    $("#full-details-amount").html(data.amount);
+
+                });
+
+                $("#today-booking-table").on("click", ".today-booking-info-btn", function() {
+                    let data = todayBookingTable.row($(this).parents('tr')).data();
+
+                    $("#booking-info-modal").modal("show");
+                    $("#full-details-status").html(data.status);
+                    $("#full-details-name").html(data.name);
+                    $("#full-details-email").html(data.email);
+                    $("#full-details-phone").html(data.phone);
+                    $("#full-details-date").html(data.date);
+                    $("#full-details-message").html(data.message);
+                    $("#full-details-service").html(data.service);
+                    $("#full-details-amount").html(data.amount);
+
                 });
             </script>
         @endpush

@@ -11,7 +11,7 @@ class TransactionController extends Controller
     public function index()
     {
         $data = DB::table("transactions")->select("transactions.*","booking.name")
-        ->join("booking","booking.email","transactions.email")
+        ->join("booking","booking.booking_code","transactions.transaction")
         ->orderByDesc("transactions.created_at")
         ->get();
 

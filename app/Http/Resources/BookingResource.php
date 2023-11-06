@@ -18,8 +18,9 @@ class BookingResource extends JsonResource
             "name" => $this->name,
             "email" => $this->email,
             "phone" => $this->phone,
-            "date" => date("jS M Y H:i:s A",strtotime($this->booking_date)),
-            "amount" => "GHS".$this->amount,
+            "message" => $this->message,
+            "date" => date("jS M Y H:i:s A", strtotime($this->booking_date)),
+            "amount" => "GHS" . $this->amount,
             "service" => $this->desc,
             "status" => $this->status == "paid" ? "<span style='background-color: #28a74520; color: #28a745'>PAID</span>" : "<span style='background-color: #dc354520; color: #dc3545'>NOT PAID</span>"
         ];
