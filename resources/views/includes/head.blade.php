@@ -22,4 +22,7 @@
 <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 <link href="assets/vendor/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
 <link href="assets/vendor/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 @show

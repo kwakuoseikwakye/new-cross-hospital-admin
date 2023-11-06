@@ -14,7 +14,7 @@ class BookingController extends Controller
     public function index()
     {
         $today = date("Y-m-d");
-        $booking = DB::table("booking")->select("booking.*", "services.*")
+        $booking = DB::table("booking")->select("booking.*", "services.code","services.desc")
             ->join("services", "booking.service_code", "services.code")
             ->whereDate("booking_date", $today)
             ->get();
@@ -26,13 +26,29 @@ class BookingController extends Controller
 
     public function allBooking()
     {
-        $booking = DB::table("booking")->select("booking.*", "services.*")
+        $booking = DB::table("booking")->select("booking.*", "services.code","services.desc")
             ->join("services", "booking.service_code", "services.code")
             ->orderByDesc("booking.booking_date")
             ->get();
 
         return response()->json([
             "data" => BookingResource::collection($booking)
+        ]);
+    }
+
+    public function checkVisit($id)
+    {
+        if (empty($id)) {
+            return response()->json([
+                "status" => false
+            ]);
+        }
+        DB::table("booking")->where("id", $id)->update([
+            'visit' => "yes",
+        ]);
+
+        return response()->json([
+            "status" => true
         ]);
     }
 

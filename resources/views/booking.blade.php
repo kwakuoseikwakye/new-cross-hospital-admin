@@ -64,6 +64,7 @@
                                                 <th>Booking Date</th>
                                                 <th>Service</th>
                                                 <th>Status</th>
+                                                <th>Visited</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -109,8 +110,7 @@
                             data: "status"
                         },
                         {
-                            data: null,
-                            defaultContent: "<button href='#' title='View booking info' class='btn btn-outline-info btn-sm booking-info-btn'>More Info</button>",
+                            data: "action"
                         },
                     ],
                     buttons: [{
@@ -195,8 +195,10 @@
                             data: "status"
                         },
                         {
-                            data: null,
-                            defaultContent: "<button href='#' title='View booking info' class='btn btn-outline-info btn-sm booking-info-btn'>More Info</button>",
+                            data: "visit"
+                        },
+                        {
+                            data: "action"
                         },
                     ],
                     buttons: [{
@@ -266,7 +268,59 @@
 
                 });
 
-                $("#today-booking-table").on("click", ".today-booking-info-btn", function() {
+                $("#booking-table").on("click", ".update-status-btn", function() {
+                    let data = bookingTable.row($(this).parents('tr')).data();
+
+                    Swal.fire({
+                        title: 'Has the patient visited the hospital?',
+                        text: "Click 'Yes' to approve",
+                        icon: 'info',
+                        showCancelButton: false,
+                        cancelButtonText: 'No',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes'
+
+                    }).then((result) => {
+
+                        if (result.value) {
+                            Swal.fire({
+                                text: "Processing please wait...",
+                                showConfirmButton: false,
+                                allowEscapeKey: false,
+                                allowOutsideClick: false
+                            });
+                            fetch(`/api/has_visited/${data.id}`, {
+                                method: "GET",
+                            }).then(function(res) {
+                                return res.json()
+                            }).then(function(data) {
+                                if (!data.status) {
+                                    Swal.fire({
+                                        text: "An internal error ocurred",
+                                        icon: "error"
+                                    });
+                                    return;
+                                }
+                                Swal.fire({
+                                    text: "Visited status updated  successfully",
+                                    icon: "success"
+                                });
+
+                                bookingTable.ajax.reload(null, false);
+
+                            }).catch(function(err) {
+                                if (err) {
+                                    Swal.fire({
+                                        text: "An error has ocurred"
+                                    });
+                                }
+                            })
+                        }
+                    })
+                });
+
+                $("#today-booking-table").on("click", ".booking-info-btn", function() {
                     let data = todayBookingTable.row($(this).parents('tr')).data();
 
                     $("#booking-info-modal").modal("show");
