@@ -46,6 +46,7 @@
                                                 <th>Booking Date</th>
                                                 <th>Service</th>
                                                 <th>Status</th>
+                                                <th>Visited</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -109,6 +110,9 @@
                         },
                         {
                             data: "status"
+                        },
+                        {
+                            data: "visit"
                         },
                         {
                             data: "action"
@@ -330,6 +334,71 @@
                     $("#send-msg-modal").modal("show");
                     $("#message-recipient-phone").val(data.phone);
                     $("#message-recipient-code").val(data.id);
+                });
+
+                /*
+                 *FOR TODAY BOOKING SCRIPT
+                 */
+                //send reminders msg
+                $("#today-booking-table").on("click", ".send-reminder-btn", function() {
+                    let data = todayBookingTable.row($(this).parents('tr')).data();
+
+                    $("#send-msg-modal").modal("show");
+                    $("#message-recipient-phone").val(data.phone);
+                    $("#message-recipient-code").val(data.id);
+                });
+
+                //update status
+                $("#today-booking-table").on("click", ".update-status-btn", function() {
+                    let data = todayBookingTable.row($(this).parents('tr')).data();
+
+                    Swal.fire({
+                        title: 'Has the patient visited the hospital?',
+                        text: "Click 'Yes' to approve",
+                        icon: 'info',
+                        showCancelButton: false,
+                        cancelButtonText: 'No',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes'
+
+                    }).then((result) => {
+
+                        if (result.value) {
+                            Swal.fire({
+                                text: "Processing please wait...",
+                                showConfirmButton: false,
+                                allowEscapeKey: false,
+                                allowOutsideClick: false
+                            });
+                            fetch(`/api/has_visited/${data.id}`, {
+                                method: "GET",
+                            }).then(function(res) {
+                                return res.json()
+                            }).then(function(data) {
+                                if (!data.status) {
+                                    Swal.fire({
+                                        text: "An internal error ocurred",
+                                        icon: "error"
+                                    });
+                                    return;
+                                }
+                                Swal.fire({
+                                    text: "Visited status updated  successfully",
+                                    icon: "success"
+                                });
+
+                                todayBookingTable.ajax.reload(null, false);
+
+                            }).catch(function(err) {
+                                if (err) {
+                                    Swal.fire({
+                                        text: "An error has ocurred"
+                                    });
+                                }
+                            })
+                        }
+                    })
                 });
 
                 $("#today-booking-table").on("click", ".booking-info-btn", function() {

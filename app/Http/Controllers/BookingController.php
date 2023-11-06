@@ -20,6 +20,7 @@ class BookingController extends Controller
         $booking = DB::table("booking")->select("booking.*", "services.code", "services.desc")
             ->join("services", "booking.service_code", "services.code")
             ->whereDate("booking_date", $today)
+            ->orderByDesc("booking.booking_date")
             ->get();
 
         return response()->json([
