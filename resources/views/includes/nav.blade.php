@@ -41,7 +41,7 @@
               </button>
 
               <!-- Topbar Search Form -->
-              <div class="app-search dropdown d-none d-lg-block">
+              {{-- <div class="app-search dropdown d-none d-lg-block">
                   <form>
                       <div class="input-group">
                           <input type="search" class="form-control dropdown-toggle" placeholder="Search..."
@@ -106,11 +106,11 @@
                           </a>
                       </div>
                   </div>
-              </div>
+              </div> --}}
           </div>
 
           <ul class="topbar-menu d-flex align-items-center gap-3">
-              <li class="dropdown d-lg-none">
+              {{-- <li class="dropdown d-lg-none">
                   <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
                       aria-haspopup="false" aria-expanded="false">
                       <i class="ri-search-line font-22"></i>
@@ -121,10 +121,10 @@
                               aria-label="Recipient's username">
                       </form>
                   </div>
-              </li>
+              </li> --}}
 
 
-              <li class="dropdown notification-list">
+              {{-- <li class="dropdown notification-list">
                   <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
                       aria-haspopup="false" aria-expanded="false">
                       <i class="ri-notification-3-line font-22"></i>
@@ -273,7 +273,7 @@
                       </a>
 
                   </div>
-              </li>
+              </li> --}}
 
 
               <li class="d-none d-sm-inline-block">
@@ -298,33 +298,33 @@
                   </a>
                   <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
                       <!-- item-->
-                      <div class=" dropdown-header noti-title">
+                      {{-- <div class=" dropdown-header noti-title">
                           <h6 class="text-overflow m-0">Welcome !</h6>
-                      </div>
+                      </div> --}}
 
                       <!-- item-->
-                      <a href="javascript:void(0);" class="dropdown-item">
+                      {{-- <a href="javascript:void(0);" class="dropdown-item">
                           <i class="mdi mdi-account-circle me-1"></i>
                           <span>My Account</span>
-                      </a>
+                      </a> --}}
 
                       <!-- item-->
-                      <a href="javascript:void(0);" class="dropdown-item">
+                      {{-- <a href="javascript:void(0);" class="dropdown-item">
                           <i class="mdi mdi-account-edit me-1"></i>
                           <span>Settings</span>
-                      </a>
+                      </a> --}}
 
                       <!-- item-->
-                      <a href="javascript:void(0);" class="dropdown-item">
+                      {{-- <a href="javascript:void(0);" class="dropdown-item">
                           <i class="mdi mdi-lifebuoy me-1"></i>
                           <span>Support</span>
-                      </a>
+                      </a> --}}
 
                       <!-- item-->
-                      <a href="javascript:void(0);" class="dropdown-item">
+                      {{-- <a href="javascript:void(0);" class="dropdown-item">
                           <i class="mdi mdi-lock-outline me-1"></i>
                           <span>Lock Screen</span>
-                      </a>
+                      </a> --}}
 
                       <!-- item-->
                       <a href="/logout" class="dropdown-item">
