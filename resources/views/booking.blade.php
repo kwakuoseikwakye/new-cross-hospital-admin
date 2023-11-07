@@ -56,6 +56,32 @@
                                 </div> <!-- end preview-->
 
                                 <div class="tab-pane " id="basic-datatable-code">
+                                    <form id="today-form-filter">
+                                        @csrf
+                                        <div class="row g-3 align-items-center mb-3">
+                                            <div class="col-auto">
+                                                <label for="inputPassword6" class="col-form-label">From</label>
+                                            </div>
+                                            <div class="col-auto">
+                                                <input type="date" id="today-from-date" class="form-control"
+                                                    aria-describedby="passwordHelpInline" required>
+                                            </div>
+                                            <div class="col-auto">
+                                                <label for="inputPassword6" class="col-form-label">To</label>
+                                            </div>
+                                            <div class="col-auto">
+                                                <input type="date" id="today-to-date" class="form-control"
+                                                    aria-describedby="passwordHelpInline" required>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span id="passwordHelpInline" class="form-text">
+                                                    <button type="submit" class="btn btn-primary" id="today-submit-button"
+                                                        form="today-form-filter">Filter</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <hr>
                                     <table id="booking-table" class="table table-striped dt-responsive nowrap w-100">
                                         <thead>
                                             <tr>
@@ -414,6 +440,20 @@
                     $("#full-details-service").html(data.service);
                     $("#full-details-amount").html(data.amount);
 
+                });
+
+                let todayFormFilter = document.getElementById('today-form-filter');
+                let todayFrom = document.getElementById("today-from-date");
+                let todayTo = document.getElementById("today-to-date");
+                let todaySubmitBtn = document.getElementById("today-submit-button");
+
+                todayFormFilter.addEventListener("submit", function(e) {
+                    e.preventDefault();
+
+                    let from = todayFrom.value;
+                    let to = todayTo.value;
+
+                    bookingTable.ajax.url(`/api/filter_all_booking/${from}/${to}`).load();
                 });
             </script>
         @endpush

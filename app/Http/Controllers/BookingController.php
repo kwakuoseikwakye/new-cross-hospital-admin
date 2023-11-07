@@ -40,6 +40,19 @@ class BookingController extends Controller
         ]);
     }
 
+    public function filterAllBooking($from, $to)
+    {
+        $booking = DB::table("booking")->select("booking.*", "services.code", "services.desc")
+            ->join("services", "booking.service_code", "services.code")
+            ->whereBetween("booking_date", [$from, $to])
+            ->orderByDesc("booking.booking_date")
+            ->get();
+
+        return response()->json([
+            "data" => BookingResource::collection($booking)
+        ]);
+    }
+
     public function checkVisit($id)
     {
         if (empty($id)) {
