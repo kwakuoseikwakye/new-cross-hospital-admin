@@ -40,6 +40,20 @@ class BookingController extends Controller
         ]);
     }
 
+    public function upcomingBooking()
+    {
+        $today = date("Y-m-d");
+        $booking = DB::table("booking")->select("booking.*", "services.code", "services.desc")
+            ->join("services", "booking.service_code", "services.code")
+            ->where("booking_date", ">", $today)
+            ->orderByDesc("booking.booking_date")
+            ->get();
+
+        return response()->json([
+            "data" => BookingResource::collection($booking)
+        ]);
+    }
+
     public function filterAllBooking($from, $to)
     {
         $booking = DB::table("booking")->select("booking.*", "services.code", "services.desc")

@@ -29,6 +29,12 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a href="#basic-datatable-code-upcoming" data-bs-toggle="tab" aria-expanded="true"
+                                        class="nav-link">
+                                        Upcoming Bookings
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="#basic-datatable-code" data-bs-toggle="tab" aria-expanded="true"
                                         class="nav-link">
                                         All Bookings
@@ -98,7 +104,53 @@
                                         <tbody>
                                         </tbody>
                                     </table>
-                                </div> <!-- end preview code-->
+                                </div> 
+                                
+                                <div class="tab-pane " id="basic-datatable-code-upcoming">
+                                    <form id="upcoming-form-filter">
+                                        @csrf
+                                        <div class="row g-3 align-items-center mb-3">
+                                            <div class="col-auto">
+                                                <label for="inputPassword6" class="col-form-label">From</label>
+                                            </div>
+                                            <div class="col-auto">
+                                                <input type="date" id="upcoming-from-date" class="form-control"
+                                                    aria-describedby="passwordHelpInline" required>
+                                            </div>
+                                            <div class="col-auto">
+                                                <label for="inputPassword6" class="col-form-label">To</label>
+                                            </div>
+                                            <div class="col-auto">
+                                                <input type="date" id="upcoming-to-date" class="form-control"
+                                                    aria-describedby="passwordHelpInline" required>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span id="passwordHelpInline" class="form-text">
+                                                    <button type="submit" class="btn btn-primary" id="upcoming-submit-button"
+                                                        form="upcoming-form-filter">Filter</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <hr>
+                                    <table id="upcoming-table" class="table table-striped dt-responsive nowrap w-100">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                {{-- <th>Email</th> --}}
+                                                <th>Amount</th>
+                                                <th>Booking Date</th>
+                                                <th>Service</th>
+                                                <th>Status</th>
+                                                <th>Visited</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end preview code-->
                             </div> <!-- end tab-content-->
                         </div> <!-- end card body-->
                     </div> <!-- end card -->
@@ -454,6 +506,186 @@
                     let to = todayTo.value;
 
                     bookingTable.ajax.url(`/api/filter_all_booking/${from}/${to}`).load();
+                });
+
+                //UPCOMING TABLE SCRIPT
+                var upcomingTable = $('#upcoming-table').DataTable({
+                    "lengthChange": false,
+                    dom: 'Bfrtip',
+                    processing: true,
+                    ordering: false,
+                    order: [],
+                    responsive: true,
+                    ajax: {
+                        url: '/api/upcoming_booking',
+                        type: "GET",
+                    },
+                    columns: [{
+                            data: "name"
+                        },
+                        // {
+                        //     data: "email"
+                        // },
+                        {
+                            data: "amount"
+                        },
+                        {
+                            data: "date"
+                        },
+                        {
+                            data: "service"
+                        },
+                        {
+                            data: "status"
+                        },
+                        {
+                            data: "visit"
+                        },
+                        {
+                            data: "action"
+                        },
+                    ],
+                    buttons: [{
+                            extend: 'print',
+                            title: `Booking Lists`,
+                            attr: {
+                                class: "btn btn-sm btn-info rounded-right"
+                            },
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            }
+                        },
+                        {
+                            extend: 'copy',
+                            title: `Booking Lists`,
+                            attr: {
+                                class: "btn btn-sm btn-info rounded-right"
+                            },
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            }
+                        },
+                        {
+                            extend: 'excel',
+                            title: `Booking Lists`,
+                            attr: {
+                                class: "btn btn-sm btn-info rounded-right"
+                            },
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            }
+                        },
+                        {
+                            extend: 'pdf',
+                            title: `Booking Lists`,
+                            attr: {
+                                class: "btn btn-sm btn-info rounded-right"
+                            },
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            }
+                        },
+                        {
+                            text: "Refresh",
+                            attr: {
+                                class: "ml-2 btn-secondary btn btn-sm rounded"
+                            },
+                            action: function(e, dt, node, config) {
+                                dt.ajax.reload(null, false);
+                            }
+                        },
+                    ]
+                });
+
+                //send reminders msg
+                $("#upcoming-table").on("click", ".send-reminder-btn", function() {
+                    let data = upcomingTable.row($(this).parents('tr')).data();
+
+                    $("#send-msg-modal").modal("show");
+                    $("#message-recipient-phone").val(data.phone);
+                    $("#message-recipient-code").val(data.id);
+                });
+
+                //update status
+                $("#upcoming-table").on("click", ".update-status-btn", function() {
+                    let data = upcomingTable.row($(this).parents('tr')).data();
+
+                    Swal.fire({
+                        title: 'Has the patient visited the hospital?',
+                        text: "Click 'Yes' to approve",
+                        icon: 'info',
+                        showCancelButton: false,
+                        cancelButtonText: 'No',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes'
+
+                    }).then((result) => {
+
+                        if (result.value) {
+                            Swal.fire({
+                                text: "Processing please wait...",
+                                showConfirmButton: false,
+                                allowEscapeKey: false,
+                                allowOutsideClick: false
+                            });
+                            fetch(`/api/has_visited/${data.id}`, {
+                                method: "GET",
+                            }).then(function(res) {
+                                return res.json()
+                            }).then(function(data) {
+                                if (!data.status) {
+                                    Swal.fire({
+                                        text: "An internal error ocurred",
+                                        icon: "error"
+                                    });
+                                    return;
+                                }
+                                Swal.fire({
+                                    text: "Visited status updated  successfully",
+                                    icon: "success"
+                                });
+
+                                upcomingTable.ajax.reload(null, false);
+
+                            }).catch(function(err) {
+                                if (err) {
+                                    Swal.fire({
+                                        text: "An error has ocurred"
+                                    });
+                                }
+                            })
+                        }
+                    })
+                });
+
+                $("#upcoming-table").on("click", ".booking-info-btn", function() {
+                    let data = upcomingTable.row($(this).parents('tr')).data();
+
+                    $("#booking-info-modal").modal("show");
+                    $("#full-details-status").html(data.status);
+                    $("#full-details-name").html(data.name);
+                    $("#full-details-email").html(data.email);
+                    $("#full-details-phone").html(data.phone);
+                    $("#full-details-date").html(data.date);
+                    $("#full-details-message").html(data.message);
+                    $("#full-details-service").html(data.service);
+                    $("#full-details-amount").html(data.amount);
+
+                });
+
+                let upcomingFormFilter = document.getElementById('upcoming-form-filter');
+                let upcomingFrom = document.getElementById("upcoming-from-date");
+                let upcomingTo = document.getElementById("upcoming-to-date");
+                let upcomingSubmitBtn = document.getElementById("upcoming-submit-button");
+
+                upcomingFormFilter.addEventListener("submit", function(e) {
+                    e.preventDefault();
+
+                    let from = upcomingFrom.value;
+                    let to = upcomingTo.value;
+
+                    upcomingTable.ajax.url(`/api/filter_all_booking/${from}/${to}`).load();
                 });
             </script>
         @endpush
